@@ -11,7 +11,7 @@ stages:
       steps:
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: 'System.DefaultWorkingDirectory)/terraform-manifests'
+          targetPath: '$(System.DefaultWorkingDirectory)/terraform-manifests'
           artifact: 'terraform-manifests-out'
           publishLocation: 'pipeline'
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
@@ -20,7 +20,7 @@ stages:
       - task: TerraformCLI@0
         inputs:
           command: 'init'
-          workingDirectory: 'System.DefaultWorkingDirectory)/terraform-manifests'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests'
           backendType: 'azurerm'
           backendServiceArm: 'terraform-azure-aks-sc'
           ensureBackend: true
@@ -28,5 +28,5 @@ stages:
       - task: TerraformCLI@0
         inputs:
           command: 'validate'
-          workingDirectory: 'System.DefaultWorkingDirectory)/terraform-manifests'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests'
           allowTelemetryCollection: false
