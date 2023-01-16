@@ -68,7 +68,7 @@ stages:
                 workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
                 environmentServiceName: 'terraform-azure-aks-sc'
                 providerAzureRmSubscriptionId: '2a6339a3-ea85-47fa-8172-fb7a083cd0fb'
-                commandOptions: '-var env$(DEV_ENV) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENV)-$(Build.BuildId).out'
+                commandOptions: '-var env=$(DEV_ENV) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENV)-$(Build.BuildId).out'
                 allowTelemetryCollection: false
              - task: TerraformCLI@0
                inputs:
