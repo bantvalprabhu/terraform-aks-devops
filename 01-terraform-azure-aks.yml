@@ -23,8 +23,12 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests'
           backendType: 'azurerm'
           backendServiceArm: 'terraform-azure-aks-sc'
-          ensureBackend: true
-          allowTelemetryCollection: false
+          backendAzureRmResourceGroupName: 'rg-acr'
+          backendAzureRmStorageAccountName: 'demoteraformaksbackend'
+          backendAzureRmContainerName: 'terraformbackend'
+          backendAzureRmKey: 'tfstatefiles'
+          allowTelemetryCollection: true
+      
       - task: TerraformCLI@0
         inputs:
           command: 'validate'
