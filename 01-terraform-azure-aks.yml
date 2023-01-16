@@ -43,7 +43,6 @@ stages:
 - stage: Deploy AKS Cluster
   jobs:
     - deployment: DeployDevAKSCluster
-      displayName: DeployDevAKSCluster
       pool: 
         vmImage: 'ubuntu-latest'
       environment: $(DEV_ENV)
