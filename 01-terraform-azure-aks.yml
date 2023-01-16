@@ -4,6 +4,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+- name: DEV_ENV
+  value: dev
+- name: QA_ENV
+  value: qa
+
 stages:
 - stage: TerrafomValidate
   jobs:
@@ -34,3 +40,44 @@ stages:
           command: 'validate'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests'
           allowTelemetryCollection: false
+- stage: Deploy AKS Cluster
+  jobs:
+    - deployment: DeployDevAKSCluster
+      displayName: DeployDevAKSCluster
+      pool: 
+        vmImage: 'ubuntu-latest'
+      environment: $(DEV_ENV)
+      strategy: 
+       runOnce:
+         deploy:
+           steps:
+             - task: TerraformCLI@0
+               inputs:
+                 command: 'init'
+                 workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                 backendType: 'azurerm'
+                 backendServiceArm: 'terraform-azure-aks-sc'
+                 backendAzureRmResourceGroupName: 'rg-acr'
+                 backendAzureRmStorageAccountName: 'demoteraformaksbackend'
+                 backendAzureRmContainerName: 'terraformbackend'
+                 backendAzureRmKey: 'aks-$(DEV_ENV).tfstate'
+                 allowTelemetryCollection: false
+             - task: TerraformCLI@0
+               inputs:
+                command: 'plan'
+                workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                environmentServiceName: 'terraform-azure-aks-sc'
+                providerAzureRmSubscriptionId: '2a6339a3-ea85-47fa-8172-fb7a083cd0fb'
+                commandOptions: '-var env$(DEV_ENV) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENV)-$(Build.BuildId).out'
+                allowTelemetryCollection: false
+             - task: TerraformCLI@0
+               inputs:
+                command: 'apply'
+                workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                environmentServiceName: 'terraform-azure-aks-sc'
+                providerAzureRmSubscriptionId: '2a6339a3-ea85-47fa-8172-fb7a083cd0fb'
+                commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENV)-$(Build.BuildId).out'
+                allowTelemetryCollection: false
+    
+            
+              
