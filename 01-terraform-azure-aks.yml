@@ -40,7 +40,7 @@ stages:
           command: 'validate'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests'
           allowTelemetryCollection: false
-- stage: Deploy AKS Cluster
+- stage: DeployAKSCluster
   jobs:
     - deployment: DeployDevAKSCluster
       pool: 
