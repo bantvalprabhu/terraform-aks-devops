@@ -5,6 +5,9 @@ terraform {
       version = "3.39.1"
     }
   }
+  backend "azurerm" {
+    
+  }
 }
 
 provider "azurerm" {
@@ -12,6 +15,9 @@ provider "azurerm" {
   features {
 
   }
+
 }
+
+
 
 # git filter-branch -f --index-filter 'git rm --cached -r --ignore-unmatch .terraform/'
