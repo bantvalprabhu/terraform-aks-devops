@@ -15,7 +15,7 @@ spec:
         app: app1-nginx
     spec:
       containers:
-        - name: app1-nginx
+        - name: app1-mynginx
           image: stacksimplify/kube-nginxapp1:1.0.0
           ports:
             - containerPort: 80
